@@ -29,6 +29,14 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => \App\Models\User::ROLE_USER,
+            'is_active' => true,
+            'last_login_at' => null,
+            'timezone' => 'UTC',
+            'avatar_url' => null,
+            'provider' => null,
+            'provider_id' => null,
+            'provider_token' => null,
         ];
     }
 

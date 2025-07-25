@@ -17,9 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 
-        // Global middleware
+        // Global middleware - Use Laravel 11's native CORS handling
         $middleware->use([
-            \Fruitcake\Cors\HandleCors::class,
+            \Illuminate\Http\Middleware\HandleCors::class,
         ]);
 
         // Middleware aliases

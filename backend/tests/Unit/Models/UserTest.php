@@ -88,6 +88,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $this->assertNotNull($user);
         $this->assertNotEmpty($user->name);
         $this->assertNotEmpty($user->email);
         $this->assertEquals(User::ROLE_USER, $user->role);

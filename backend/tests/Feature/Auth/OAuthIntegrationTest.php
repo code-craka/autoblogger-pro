@@ -4,10 +4,10 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\User as SocialiteUser;
 use Tests\TestCase;
+use Mockery;
 
 class OAuthIntegrationTest extends TestCase
 {
@@ -88,13 +88,15 @@ class OAuthIntegrationTest extends TestCase
             'avatar' => 'https://example.com/avatar.jpg',
         ]);
 
+        // Mock Socialite driver with proper expectations
+        $mockDriver = Mockery::mock();
+        $mockDriver->shouldReceive('stateless')->once()->andReturnSelf();
+        $mockDriver->shouldReceive('user')->once()->andReturn($socialiteUser);
+
         Socialite::shouldReceive('driver')
                  ->with('google')
-                 ->andReturnSelf()
-                 ->shouldReceive('stateless')
-                 ->andReturnSelf()
-                 ->shouldReceive('user')
-                 ->andReturn($socialiteUser);
+                 ->once()
+                 ->andReturn($mockDriver);
 
         $response = $this->getJson('/api/v1/auth/oauth/google/callback');
 
@@ -139,13 +141,15 @@ class OAuthIntegrationTest extends TestCase
             'avatar' => 'https://example.com/avatar.jpg',
         ]);
 
+        // Mock Socialite driver with proper expectations
+        $mockDriver = Mockery::mock();
+        $mockDriver->shouldReceive('stateless')->once()->andReturnSelf();
+        $mockDriver->shouldReceive('user')->once()->andReturn($socialiteUser);
+
         Socialite::shouldReceive('driver')
                  ->with('google')
-                 ->andReturnSelf()
-                 ->shouldReceive('stateless')
-                 ->andReturnSelf()
-                 ->shouldReceive('user')
-                 ->andReturn($socialiteUser);
+                 ->once()
+                 ->andReturn($mockDriver);
 
         $response = $this->getJson('/api/v1/auth/oauth/google/callback');
 
@@ -176,13 +180,15 @@ class OAuthIntegrationTest extends TestCase
             'name' => 'John Doe',
         ]);
 
+        // Mock Socialite driver with proper expectations
+        $mockDriver = Mockery::mock();
+        $mockDriver->shouldReceive('stateless')->once()->andReturnSelf();
+        $mockDriver->shouldReceive('user')->once()->andReturn($socialiteUser);
+
         Socialite::shouldReceive('driver')
                  ->with('google')
-                 ->andReturnSelf()
-                 ->shouldReceive('stateless')
-                 ->andReturnSelf()
-                 ->shouldReceive('user')
-                 ->andReturn($socialiteUser);
+                 ->once()
+                 ->andReturn($mockDriver);
 
         $response = $this->getJson('/api/v1/auth/oauth/google/callback');
 
@@ -197,14 +203,19 @@ class OAuthIntegrationTest extends TestCase
      */
     private function createMockSocialiteUser(array $attributes): SocialiteUser
     {
-        $user = new SocialiteUser();
-        $user->map([
-            'id' => $attributes['id'],
-            'email' => $attributes['email'],
-            'name' => $attributes['name'],
-            'avatar' => $attributes['avatar'] ?? null,
-        ]);
+        $user = Mockery::mock(SocialiteUser::class);
+        $user->shouldReceive('getId')->andReturn($attributes['id']);
+        $user->shouldReceive('getEmail')->andReturn($attributes['email']);
+        $user->shouldReceive('getName')->andReturn($attributes['name']);
+        $user->shouldReceive('getAvatar')->andReturn($attributes['avatar'] ?? null);
+        $user->token = 'mock_token';
 
         return $user;
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }
