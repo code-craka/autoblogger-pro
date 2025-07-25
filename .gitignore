@@ -1,0 +1,368 @@
+# AutoBlogger Pro - Monorepo .gitignore
+
+# ===========================
+# Root Level Ignores
+# ===========================
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+.env.*.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Coverage and test results
+coverage/
+*.lcov
+.nyc_output/
+test-results/
+junit.xml
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# ===========================
+# Frontend (Next.js) Ignores
+# ===========================
+
+# Dependencies
+frontend/node_modules/
+frontend/.pnpm-store/
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+
+# Next.js cache
+frontend/.next/
+frontend/.vercel
+
+# Environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Testing
+frontend/coverage/
+frontend/.nyc_output
+
+# Storybook
+frontend/storybook-static/
+
+# Build outputs
+frontend/dist/
+frontend/build/
+
+# TypeScript
+frontend/*.tsbuildinfo
+frontend/.tsbuildinfo
+
+# ESLint cache
+frontend/.eslintcache
+
+# Prettier cache
+frontend/.prettiercache
+
+# ===========================
+# Backend (Laravel) Ignores
+# ===========================
+
+# Dependencies
+backend/vendor/
+
+# Laravel specific
+backend/.env
+backend/.env.backup
+backend/.env.production
+backend/.phpunit.result.cache
+backend/Homestead.json
+backend/Homestead.yaml
+backend/auth.json
+backend/npm-debug.log
+backend/yarn-error.log
+
+# Laravel storage and cache
+backend/storage/*.key
+backend/storage/app/*
+!backend/storage/app/.gitkeep
+!backend/storage/app/public/
+backend/storage/framework/cache/*
+!backend/storage/framework/cache/.gitkeep
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitkeep
+backend/storage/framework/testing/*
+!backend/storage/framework/testing/.gitkeep
+backend/storage/framework/views/*
+!backend/storage/framework/views/.gitkeep
+backend/storage/logs/*
+!backend/storage/logs/.gitkeep
+
+# Laravel Bootstrap cache
+backend/bootstrap/cache/*
+!backend/bootstrap/cache/.gitkeep
+
+# Public storage symlink
+backend/public/storage
+
+# Laravel Telescope
+backend/storage/telescope/
+
+# Laravel Horizon
+backend/storage/horizon/
+
+# Composer
+backend/composer.phar
+
+# PHPUnit
+backend/.phpunit.result.cache
+backend/coverage/
+backend/coverage.xml
+
+# PHP CS Fixer
+backend/.php_cs.cache
+backend/.php-cs-fixer.cache
+
+# Laravel Mix / Vite
+backend/public/hot
+backend/public/build
+backend/public/css/
+backend/public/js/
+backend/mix-manifest.json
+
+# Node modules in Laravel (if using Laravel Mix/Vite)
+backend/node_modules/
+
+# ===========================
+# Documentation Ignores
+# ===========================
+
+# Generated documentation
+docs/_build/
+docs/.doctrees/
+
+# ===========================
+# Docker & DevOps Ignores
+# ===========================
+
+# Docker
+.docker/
+docker-compose.override.yml
+.dockerignore
+
+# Kubernetes
+k8s-secrets.yaml
+*.secret.yaml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# ===========================
+# CI/CD & Deployment Ignores
+# ===========================
+
+# GitHub Actions artifacts
+.github/artifacts/
+
+# Deployment scripts with secrets
+deploy.sh
+deploy-secrets.sh
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.cert
+
+# ===========================
+# Package Manager Caches
+# ===========================
+
+# pnpm
+.pnpm-store/
+.pnpm-debug.log*
+
+# npm
+node_modules/
+.npm/
+npm-debug.log*
+
+# Yarn
+.yarn/cache/
+.yarn/unplugged/
+.yarn/install-state.gz
+.yarn/build-state.yml
+.pnp.*
+
+# ===========================
+# Monitoring & Analytics
+# ===========================
+
+# Sentry
+.sentryclirc
+
+# New Relic
+newrelic.ini
+
+# ===========================
+# Database & Backup Files
+# ===========================
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Backup files
+*.sql
+*.dump
+backup/
+backups/
+
+# ===========================
+# Security & Secrets
+# ===========================
+
+# API keys and secrets
+secrets/
+.secrets/
+*.secret
+*.secrets
+
+# JWT keys
+*.jwt
+oauth-private.key
+oauth-public.key
+
+# ===========================
+# Performance & Profiling
+# ===========================
+
+# Profiling files
+*.prof
+*.trace
+
+# Lighthouse reports
+lighthouse-reports/
+
+# ===========================
+# Project Specific Ignores
+# ===========================
+
+# OpenAI API responses cache
+openai-cache/
+
+# Generated content samples
+samples/
+test-content/
+
+# User uploads (development)
+uploads/
+user-content/
+
+# Stripe webhook cache
+stripe-webhooks/
+
+# Redis dumps
+dump.rdb
+
+# ===========================
+# Archive & Compressed Files
+# ===========================
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# ===========================
+# Miscellaneous
+# ===========================
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs generated by jscoverage/JSCover
+lib-cov/
+
+# nyc test coverage
+.nyc_output/
+
+# Grunt intermediate storage
+.grunt/
+
+# Bower dependency directory
+bower_components/
+
+# Lock files (keep package-lock.json if using npm, but we use pnpm)
+package-lock.json
+yarn.lock
+
+# Parcel cache
+.cache/
+.parcel-cache/
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test/

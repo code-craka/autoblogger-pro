@@ -1,0 +1,81 @@
+{
+  "name": "autoblogger-pro",
+  "version": "1.0.0",
+  "description": "AI-Powered Content Generation Platform - Monorepo",
+  "author": {
+    "name": "Sayem Abdullah Rihan",
+    "email": "codecraka@gmail.com",
+    "url": "https://github.com/code-craka"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-craka/autoblogger-pro.git"
+  },
+  "homepage": "https://autoblogger-pro.com",
+  "bugs": {
+    "url": "https://github.com/code-craka/autoblogger-pro/issues"
+  },
+  "keywords": [
+    "ai",
+    "content-generation",
+    "blog",
+    "seo",
+    "laravel",
+    "nextjs",
+    "typescript",
+    "monorepo"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "scripts": {
+    "install:all": "pnpm install && cd backend && composer install",
+    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
+    "dev:frontend": "cd frontend && pnpm dev",
+    "dev:backend": "cd backend && php artisan serve",
+    "build": "pnpm build:frontend",
+    "build:frontend": "cd frontend && pnpm build",
+    "test": "pnpm test:frontend && pnpm test:backend",
+    "test:all": "pnpm test:frontend && pnpm test:backend",
+    "test:frontend": "cd frontend && pnpm test",
+    "test:backend": "cd backend && php artisan test",
+    "test:coverage": "pnpm test:coverage:frontend && pnpm test:coverage:backend",
+    "test:coverage:frontend": "cd frontend && pnpm test:coverage",
+    "test:coverage:backend": "cd backend && php artisan test --coverage",
+    "lint": "pnpm lint:frontend",
+    "lint:frontend": "cd frontend && pnpm lint",
+    "lint:fix": "pnpm lint:fix:frontend",
+    "lint:fix:frontend": "cd frontend && pnpm lint:fix",
+    "type-check": "cd frontend && pnpm type-check",
+    "format": "cd frontend && pnpm format",
+    "clean": "pnpm clean:frontend && pnpm clean:backend",
+    "clean:frontend": "cd frontend && rm -rf .next node_modules",
+    "clean:backend": "cd backend && rm -rf vendor",
+    "setup": "pnpm install:all && pnpm setup:backend",
+    "setup:backend": "cd backend && cp .env.example .env && php artisan key:generate",
+    "migrate": "cd backend && php artisan migrate",
+    "migrate:fresh": "cd backend && php artisan migrate:fresh --seed",
+    "queue:work": "cd backend && php artisan queue:work",
+    "passport:install": "cd backend && php artisan passport:install",
+    "postinstall": "husky install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx,js,jsx}": [
+      "cd frontend && pnpm lint:fix",
+      "cd frontend && pnpm format"
+    ]
+  },
+  "private": true
+}
+
