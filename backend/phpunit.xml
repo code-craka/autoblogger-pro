@@ -29,13 +29,16 @@
             <file>app/Http/Kernel.php</file>
         </exclude>
     </source>
-    <logging>
-        <log type="coverage-html" target="coverage-html"/>
-        <log type="coverage-clover" target="coverage.xml"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-    </logging>
+    <coverage>
+        <report>
+            <html outputDirectory="coverage-html"/>
+            <clover outputFile="coverage.xml"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+        </report>
+    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="base64:2fi+SjbGWnEDAh1Y9VZ8F6W0+HJQ1oLh5/vR6u+jQ+I="/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="DB_CONNECTION" value="sqlite"/>
@@ -44,6 +47,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="PASSPORT_PRIVATE_KEY" value=""/>
+        <env name="PASSPORT_PUBLIC_KEY" value=""/>
     </php>
 </phpunit>
-

@@ -20,24 +20,16 @@ return [
 
     'allowed_origins' => [
         'http://localhost:3000',
-        'http://localhost:3001',
-        'https://autoblogger-pro.com',
-        'https://www.autoblogger-pro.com',
-        'https://app.autoblogger-pro.com',
+        'http://127.0.0.1:3000',
+        'https://localhost:3000',
+        env('FRONTEND_URL', 'http://localhost:3000'),
     ],
 
-    'allowed_origins_patterns' => [
-        // Allow any subdomain in production
-        '/^https:\/\/([a-z0-9-]+\.)?autoblogger-pro\.com$/',
-    ],
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [
-        'X-RateLimit-Limit',
-        'X-RateLimit-Remaining',
-        'X-RateLimit-Reset',
-    ],
+    'exposed_headers' => [],
 
     'max_age' => 0,
 

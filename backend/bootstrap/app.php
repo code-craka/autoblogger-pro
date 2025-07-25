@@ -12,11 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // API middleware
-        $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-        ]);
-
         // Global middleware - Use Laravel 11's native CORS handling
         $middleware->use([
             \Illuminate\Http\Middleware\HandleCors::class,

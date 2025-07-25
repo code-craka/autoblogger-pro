@@ -1,20 +1,17 @@
 {
   "name": "autoblogger-pro",
   "version": "1.0.0",
-  "description": "AI-Powered Content Generation Platform - Monorepo",
-  "author": {
-    "name": "Sayem Abdullah Rihan",
-    "email": "codecraka@gmail.com",
-    "url": "https://github.com/code-craka"
-  },
+  "description": "AI-Powered Content Generation Platform - Transform topics into SEO-optimized blog articles",
+  "private": true,
+  "author": "AutoBlogger Pro Team",
   "license": "MIT",
+  "homepage": "https://autoblogger-pro.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/code-craka/autoblogger-pro.git"
+    "url": "https://github.com/your-username/autoblogger-pro.git"
   },
-  "homepage": "https://autoblogger-pro.com",
   "bugs": {
-    "url": "https://github.com/code-craka/autoblogger-pro/issues"
+    "url": "https://github.com/your-username/autoblogger-pro/issues"
   },
   "keywords": [
     "ai",
@@ -23,59 +20,54 @@
     "seo",
     "laravel",
     "nextjs",
-    "typescript",
-    "monorepo"
+    "openai",
+    "automation"
   ],
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
-  },
-  "packageManager": "pnpm@8.15.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "install:all": "pnpm install && cd backend && composer install",
-    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
+    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend\"",
     "dev:frontend": "cd frontend && pnpm dev",
     "dev:backend": "cd backend && php artisan serve",
-    "build": "pnpm build:frontend",
+    "build": "pnpm build:frontend && pnpm build:backend",
     "build:frontend": "cd frontend && pnpm build",
+    "build:backend": "cd backend && composer install --optimize-autoloader --no-dev",
     "test": "pnpm test:frontend && pnpm test:backend",
-    "test:all": "pnpm test:frontend && pnpm test:backend",
     "test:frontend": "cd frontend && pnpm test",
     "test:backend": "cd backend && php artisan test",
     "test:coverage": "pnpm test:coverage:frontend && pnpm test:coverage:backend",
     "test:coverage:frontend": "cd frontend && pnpm test:coverage",
     "test:coverage:backend": "cd backend && php artisan test --coverage",
-    "lint": "pnpm lint:frontend",
+    "lint": "pnpm lint:frontend && pnpm lint:backend",
     "lint:frontend": "cd frontend && pnpm lint",
-    "lint:fix": "pnpm lint:fix:frontend",
-    "lint:fix:frontend": "cd frontend && pnpm lint:fix",
-    "type-check": "cd frontend && pnpm type-check",
-    "format": "cd frontend && pnpm format",
+    "lint:backend": "cd backend && vendor/bin/phpstan analyse",
+    "format": "pnpm format:frontend && pnpm format:backend",
+    "format:frontend": "cd frontend && pnpm format",
+    "format:backend": "cd backend && vendor/bin/php-cs-fixer fix",
+    "setup": "pnpm setup:backend && pnpm setup:frontend",
+    "setup:backend": "cd backend && composer install && cp .env.example .env && php artisan key:generate && php artisan migrate && php artisan passport:install",
+    "setup:frontend": "cd frontend && pnpm install && cp .env.example .env.local",
     "clean": "pnpm clean:frontend && pnpm clean:backend",
     "clean:frontend": "cd frontend && rm -rf .next node_modules",
     "clean:backend": "cd backend && rm -rf vendor",
-    "setup": "pnpm install:all && pnpm setup:backend",
-    "setup:backend": "cd backend && cp .env.example .env && php artisan key:generate",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build",
+    "docs:generate": "cd backend && php artisan l5-swagger:generate",
     "migrate": "cd backend && php artisan migrate",
     "migrate:fresh": "cd backend && php artisan migrate:fresh --seed",
     "queue:work": "cd backend && php artisan queue:work",
-    "passport:install": "cd backend && php artisan passport:install",
-    "postinstall": "husky install"
+    "schedule:run": "cd backend && php artisan schedule:run"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0"
+    "concurrently": "^8.2.2"
   },
-  "workspaces": [
-    "frontend"
-  ],
-  "lint-staged": {
-    "frontend/**/*.{ts,tsx,js,jsx}": [
-      "cd frontend && pnpm lint:fix",
-      "cd frontend && pnpm format"
-    ]
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0",
+    "pnpm": ">=8.0.0"
   },
-  "private": true
+  "packageManager": "pnpm@8.15.0"
 }
-

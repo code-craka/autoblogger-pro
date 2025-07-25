@@ -12,11 +12,6 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -27,16 +22,15 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role' => \App\Models\User::ROLE_USER,
+            'role' => 'user',
             'is_active' => true,
-            'last_login_at' => null,
             'timezone' => 'UTC',
             'avatar_url' => null,
             'provider' => null,
             'provider_id' => null,
-            'provider_token' => null,
+            'last_login_at' => null,
         ];
     }
 
@@ -47,6 +41,38 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user should be inactive.
+     */
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
+    }
+
+    /**
+     * Indicate that the user should be an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+        ]);
+    }
+
+    /**
+     * Indicate that the user should have OAuth provider.
+     */
+    public function withOAuth(string $provider = 'google'): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'provider' => $provider,
+            'provider_id' => fake()->unique()->numerify('############'),
+            'avatar_url' => fake()->imageUrl(100, 100, 'people'),
         ]);
     }
 }

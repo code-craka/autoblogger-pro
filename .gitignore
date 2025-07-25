@@ -1,15 +1,26 @@
-# AutoBlogger Pro - Monorepo .gitignore
+# Dependencies
+node_modules/
+/vendor/
 
-# ===========================
-# Root Level Ignores
-# ===========================
+# Production builds
+/.next/
+/build/
+/dist/
 
-# Environment files
+# Environment variables
 .env
 .env.local
-.env.production
-.env.staging
-.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.testing
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # OS generated files
 .DS_Store
@@ -20,15 +31,8 @@
 ehthumbs.db
 Thumbs.db
 
-# IDE and Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
 # Logs
-logs/
+logs
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -36,309 +40,27 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Coverage and test results
-coverage/
-*.lcov
-.nyc_output/
-test-results/
-junit.xml
-
-# Temporary files
-tmp/
-temp/
-.tmp/
-
-# ===========================
-# Frontend (Next.js) Ignores
-# ===========================
-
-# Dependencies
-frontend/node_modules/
-frontend/.pnpm-store/
-
-# Next.js build output
-frontend/.next/
-frontend/out/
-
-# Next.js cache
-frontend/.next/
-frontend/.vercel
-
-# Environment files
-frontend/.env
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
-
-# Testing
-frontend/coverage/
-frontend/.nyc_output
-
-# Storybook
-frontend/storybook-static/
-
-# Build outputs
-frontend/dist/
-frontend/build/
-
-# TypeScript
-frontend/*.tsbuildinfo
-frontend/.tsbuildinfo
-
-# ESLint cache
-frontend/.eslintcache
-
-# Prettier cache
-frontend/.prettiercache
-
-# ===========================
-# Backend (Laravel) Ignores
-# ===========================
-
-# Dependencies
-backend/vendor/
-
-# Laravel specific
-backend/.env
-backend/.env.backup
-backend/.env.production
-backend/.phpunit.result.cache
-backend/Homestead.json
-backend/Homestead.yaml
-backend/auth.json
-backend/npm-debug.log
-backend/yarn-error.log
-
-# Laravel storage and cache
-backend/storage/*.key
-backend/storage/app/*
-!backend/storage/app/.gitkeep
-!backend/storage/app/public/
-backend/storage/framework/cache/*
-!backend/storage/framework/cache/.gitkeep
-backend/storage/framework/sessions/*
-!backend/storage/framework/sessions/.gitkeep
-backend/storage/framework/testing/*
-!backend/storage/framework/testing/.gitkeep
-backend/storage/framework/views/*
-!backend/storage/framework/views/.gitkeep
-backend/storage/logs/*
-!backend/storage/logs/.gitkeep
-
-# Laravel Bootstrap cache
-backend/bootstrap/cache/*
-!backend/bootstrap/cache/.gitkeep
-
-# Public storage symlink
-backend/public/storage
-
-# Laravel Telescope
-backend/storage/telescope/
-
-# Laravel Horizon
-backend/storage/horizon/
-
-# Composer
-backend/composer.phar
-
-# PHPUnit
-backend/.phpunit.result.cache
-backend/coverage/
-backend/coverage.xml
-
-# PHP CS Fixer
-backend/.php_cs.cache
-backend/.php-cs-fixer.cache
-
-# Laravel Mix / Vite
-backend/public/hot
-backend/public/build
-backend/public/css/
-backend/public/js/
-backend/mix-manifest.json
-
-# Node modules in Laravel (if using Laravel Mix/Vite)
-backend/node_modules/
-
-# ===========================
-# Documentation Ignores
-# ===========================
-
-# Generated documentation
-docs/_build/
-docs/.doctrees/
-
-# ===========================
-# Docker & DevOps Ignores
-# ===========================
-
-# Docker
-.docker/
-docker-compose.override.yml
-.dockerignore
-
-# Kubernetes
-k8s-secrets.yaml
-*.secret.yaml
-
-# Terraform
-*.tfstate
-*.tfstate.*
-.terraform/
-.terraform.lock.hcl
-
-# ===========================
-# CI/CD & Deployment Ignores
-# ===========================
-
-# GitHub Actions artifacts
-.github/artifacts/
-
-# Deployment scripts with secrets
-deploy.sh
-deploy-secrets.sh
-
-# SSL certificates
-*.pem
-*.key
-*.crt
-*.cert
-
-# ===========================
-# Package Manager Caches
-# ===========================
-
-# pnpm
-.pnpm-store/
-.pnpm-debug.log*
-
-# npm
-node_modules/
-.npm/
-npm-debug.log*
-
-# Yarn
-.yarn/cache/
-.yarn/unplugged/
-.yarn/install-state.gz
-.yarn/build-state.yml
-.pnp.*
-
-# ===========================
-# Monitoring & Analytics
-# ===========================
-
-# Sentry
-.sentryclirc
-
-# New Relic
-newrelic.ini
-
-# ===========================
-# Database & Backup Files
-# ===========================
-
-# Database files
-*.sqlite
-*.sqlite3
-*.db
-
-# Backup files
-*.sql
-*.dump
-backup/
-backups/
-
-# ===========================
-# Security & Secrets
-# ===========================
-
-# API keys and secrets
-secrets/
-.secrets/
-*.secret
-*.secrets
-
-# JWT keys
-*.jwt
-oauth-private.key
-oauth-public.key
-
-# ===========================
-# Performance & Profiling
-# ===========================
-
-# Profiling files
-*.prof
-*.trace
-
-# Lighthouse reports
-lighthouse-reports/
-
-# ===========================
-# Project Specific Ignores
-# ===========================
-
-# OpenAI API responses cache
-openai-cache/
-
-# Generated content samples
-samples/
-test-content/
-
-# User uploads (development)
-uploads/
-user-content/
-
-# Stripe webhook cache
-stripe-webhooks/
-
-# Redis dumps
-dump.rdb
-
-# ===========================
-# Archive & Compressed Files
-# ===========================
-
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# ===========================
-# Miscellaneous
-# ===========================
-
 # Runtime data
-pids/
+pids
 *.pid
 *.seed
 *.pid.lock
 
-# Directory for instrumented libs generated by jscoverage/JSCover
-lib-cov/
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
 
 # nyc test coverage
-.nyc_output/
+.nyc_output
 
-# Grunt intermediate storage
-.grunt/
+# Dependency directories
+jspm_packages/
 
-# Bower dependency directory
-bower_components/
+# Optional npm cache directory
+.npm
 
-# Lock files (keep package-lock.json if using npm, but we use pnpm)
-package-lock.json
-yarn.lock
-
-# Parcel cache
-.cache/
-.parcel-cache/
+# Optional eslint cache
+.eslintcache
 
 # Microbundle cache
 .rpt2_cache/
@@ -352,17 +74,90 @@ yarn.lock
 # Output of 'npm pack'
 *.tgz
 
-# Serverless directories
-.serverless/
+# Yarn Integrity file
+.yarn-integrity
 
-# FuseBox cache
-.fusebox/
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
 
-# DynamoDB Local files
-.dynamodb/
+# Next.js build output
+.next
 
-# TernJS port file
-.tern-port
+# Nuxt.js build / generate output
+.nuxt
+dist
 
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test/
+# Storybook build outputs
+.out
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
+
+# Laravel specific
+/bootstrap/compiled.php
+/vendor
+composer.phar
+composer.lock
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Laravel storage
+/storage/*.key
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/framework/cache/*
+!/storage/framework/cache/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/testing/*
+!/storage/framework/testing/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Laravel Passport
+/storage/oauth-private.key
+/storage/oauth-public.key
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Docker
+docker-compose.override.yml
+
+# Testing
+/phpunit.xml
+/phpunit.xml.dist
+/.phpunit.cache
+
+# PHP CS Fixer
+.php_cs.cache
+.php-cs-fixer.cache
+
+# PHPStan
+.phpstan.cache
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# Security keys and certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# API keys and secrets
+.secrets/
+secrets.json

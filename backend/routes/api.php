@@ -48,73 +48,12 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::get('/me', [AuthController::class, 'me'])->name('me');
         });
 
-        // OAuth management (authenticated)
-        Route::prefix('oauth')->name('oauth.')->group(function () {
-            Route::delete('/unlink', [OAuthController::class, 'unlink'])->name('unlink');
-            Route::get('/status', [OAuthController::class, 'status'])->name('status');
-        });
-
         // User profile management
         Route::prefix('user')->name('user.')->group(function () {
             Route::get('/profile', [UserController::class, 'profile'])->name('profile');
-            Route::put('/profile', [UserController::class, 'updateProfile'])->name('update-profile');
+            Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
             Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password');
-            Route::delete('/account', [UserController::class, 'deleteAccount'])->name('delete-account');
-            Route::get('/statistics', [UserController::class, 'statistics'])->name('statistics');
         });
-
-        // Content generation
-        Route::prefix('content')->name('content.')->group(function () {
-            Route::post('/generate', 'ContentController@generate')->name('generate');
-            Route::get('/', 'ContentController@index')->name('index');
-            Route::get('/{content}', 'ContentController@show')->name('show');
-            Route::put('/{content}', 'ContentController@update')->name('update');
-            Route::delete('/{content}', 'ContentController@destroy')->name('destroy');
-            Route::get('/{content}/history', 'ContentController@history')->name('history');
-        });
-
-        // Bulk processing
-        Route::prefix('bulk')->name('bulk.')->group(function () {
-            Route::post('/upload', 'BulkController@upload')->name('upload');
-            Route::get('/batches', 'BulkController@batches')->name('batches');
-            Route::get('/batches/{batch}', 'BulkController@batchStatus')->name('batch-status');
-            Route::post('/batches/{batch}/cancel', 'BulkController@cancelBatch')->name('cancel-batch');
-            Route::get('/batches/{batch}/download', 'BulkController@downloadResults')->name('download-results');
-        });
-
-        // Subscription management
-        Route::prefix('subscription')->name('subscription.')->group(function () {
-            Route::get('/', 'SubscriptionController@current')->name('current');
-            Route::post('/create', 'SubscriptionController@create')->name('create');
-            Route::post('/upgrade', 'SubscriptionController@upgrade')->name('upgrade');
-            Route::post('/downgrade', 'SubscriptionController@downgrade')->name('downgrade');
-            Route::post('/cancel', 'SubscriptionController@cancel')->name('cancel');
-            Route::post('/resume', 'SubscriptionController@resume')->name('resume');
-            Route::get('/usage', 'SubscriptionController@usage')->name('usage');
-            Route::get('/invoices', 'SubscriptionController@invoices')->name('invoices');
-        });
-
-        // Usage analytics
-        Route::prefix('analytics')->name('analytics.')->group(function () {
-            Route::get('/dashboard', 'AnalyticsController@dashboard')->name('dashboard');
-            Route::get('/usage', 'AnalyticsController@usage')->name('usage');
-            Route::get('/content-performance', 'AnalyticsController@contentPerformance')->name('content-performance');
-        });
-
-        // Admin routes (admin role required)
-        Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
-            Route::get('/users', 'AdminController@users')->name('users');
-            Route::get('/system-stats', 'AdminController@systemStats')->name('system-stats');
-            Route::get('/content-stats', 'AdminController@contentStats')->name('content-stats');
-            Route::post('/users/{user}/suspend', 'AdminController@suspendUser')->name('suspend-user');
-            Route::post('/users/{user}/unsuspend', 'AdminController@unsuspendUser')->name('unsuspend-user');
-        });
-    });
-
-    // Webhook routes (no auth, but with signature verification)
-    Route::prefix('webhooks')->name('webhooks.')->group(function () {
-        Route::post('/stripe', 'WebhookController@stripe')->name('stripe');
-        Route::post('/openai', 'WebhookController@openai')->name('openai');
     });
 });
 

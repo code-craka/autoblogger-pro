@@ -127,7 +127,7 @@ jobs:
           ${{ runner.os }}-pnpm-
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
 
     - name: Run type checking
       working-directory: ./frontend
@@ -202,7 +202,7 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Install frontend dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
 
     - name: Run PHPStan
       working-directory: ./backend
@@ -233,7 +233,7 @@ jobs:
         version: 8
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
 
     - name: Build frontend
       working-directory: ./frontend
@@ -265,7 +265,7 @@ jobs:
         version: 8
 
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
 
     - name: Build frontend
       working-directory: ./frontend

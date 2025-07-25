@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
+  experimental: {},
   images: {
     domains: ['localhost', 'autoblogger-pro.com'],
   },

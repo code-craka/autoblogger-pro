@@ -1,37 +1,60 @@
 # Contributing to AutoBlogger Pro
 
-Thank you for your interest in contributing to AutoBlogger Pro! This document provides guidelines for contributing to our AI-powered content generation platform.
+First off, thank you for considering contributing to AutoBlogger Pro! It's people like you that make AutoBlogger Pro such a great tool for AI-powered content generation.
 
-## 📋 Table of Contents
+## Code of Conduct
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Contributing Guidelines](#contributing-guidelines)
-- [Pull Request Process](#pull-request-process)
-- [Coding Standards](#coding-standards)
-- [Testing Requirements](#testing-requirements)
-- [Documentation](#documentation)
-- [Community](#community)
+This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code.
 
-## 🤝 Code of Conduct
+## How Can I Contribute?
 
-This project adheres to a code of conduct that we expect all contributors to follow. Please read [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) before contributing.
+### Reporting Bugs
 
-## 🚀 Getting Started
+Before creating bug reports, please check the existing issues as you might find out that you don't need to create one. When you are creating a bug report, please include as many details as possible:
+
+* **Use a clear and descriptive title** for the issue to identify the problem.
+* **Describe the exact steps which reproduce the problem** in as many details as possible.
+* **Provide specific examples to demonstrate the steps**.
+* **Describe the behavior you observed after following the steps** and point out what exactly is the problem with that behavior.
+* **Explain which behavior you expected to see instead and why.**
+* **Include screenshots and animated GIFs** which show you following the described steps and clearly demonstrate the problem.
+
+### Suggesting Enhancements
+
+Enhancement suggestions are tracked as GitHub issues. When creating an enhancement suggestion, please include:
+
+* **Use a clear and descriptive title** for the issue to identify the suggestion.
+* **Provide a step-by-step description of the suggested enhancement** in as many details as possible.
+* **Provide specific examples to demonstrate the steps**.
+* **Describe the current behavior** and **explain which behavior you expected to see instead** and why.
+* **Explain why this enhancement would be useful** to most AutoBlogger Pro users.
+
+### Pull Requests
+
+The process described here has several goals:
+
+- Maintain AutoBlogger Pro's quality
+- Fix problems that are important to users
+- Engage the community in working toward the best possible AutoBlogger Pro
+- Enable a sustainable system for AutoBlogger Pro's maintainers to review contributions
+
+Please follow these steps to have your contribution considered by the maintainers:
+
+1. Follow all instructions in [the template](PULL_REQUEST_TEMPLATE.md)
+2. Follow the [styleguides](#styleguides)
+3. After you submit your pull request, verify that all [status checks](https://help.github.com/articles/about-status-checks/) are passing
+
+## Development Setup
 
 ### Prerequisites
 
-Before contributing, ensure you have:
+- Node.js 18+ with pnpm
+- PHP 8.2+ with Composer
+- PostgreSQL 14+
+- Redis 6+
+- Git
 
-- **Node.js** ≥18.0.0
-- **PHP** ≥8.2
-- **PostgreSQL** ≥14
-- **Redis** ≥6.0
-- **pnpm** ≥8.0.0 (mandatory for frontend)
-- **Composer** for PHP dependencies
-
-### Development Setup
+### Local Development
 
 1. **Fork and Clone**
    ```bash
@@ -44,402 +67,281 @@ Before contributing, ensure you have:
    cd backend
    composer install
    cp .env.example .env
+   # Configure your .env file
    php artisan key:generate
    php artisan migrate
    php artisan passport:install
+   php artisan serve
    ```
 
 3. **Frontend Setup**
    ```bash
-   cd ../frontend
+   cd frontend
    pnpm install
-   cp .env.local.example .env.local
-   ```
-
-4. **Run Development Servers**
-   ```bash
-   # Backend (in backend directory)
-   php artisan serve
-   
-   # Frontend (in frontend directory)
+   cp .env.example .env.local
+   # Configure your .env.local file
    pnpm dev
    ```
 
-## 📝 Contributing Guidelines
+4. **Create a Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-### Types of Contributions
+## Styleguides
 
-We welcome the following types of contributions:
+### Git Commit Messages
 
-- 🐛 **Bug Fixes**: Fixing issues or errors
-- ✨ **New Features**: Adding new functionality
-- 📚 **Documentation**: Improving or adding documentation
-- 🎨 **UI/UX Improvements**: Enhancing user interface and experience
-- ⚡ **Performance**: Optimizing performance and efficiency
-- 🧪 **Tests**: Adding or improving test coverage
-- 🔧 **DevOps**: Improving development and deployment processes
-
-### Before You Start
-
-1. **Check Existing Issues**: Look through [existing issues](https://github.com/code-craka/autoblogger-pro/issues) to avoid duplicates
-2. **Create an Issue**: For new features or major changes, create an issue first to discuss
-3. **Assign Yourself**: Comment on the issue to let others know you're working on it
-
-### Branch Naming Convention
-
-Use descriptive branch names following this pattern:
+We follow [Conventional Commits](https://www.conventionalcommits.org/) specification:
 
 ```
-feature/short-description     # New features
-bugfix/short-description      # Bug fixes
-hotfix/critical-issue         # Critical production fixes
-docs/improvement-area         # Documentation updates
-test/component-name           # Test improvements
-refactor/component-name       # Code refactoring
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
 ```
 
-Examples:
-- `feature/oauth-github-integration`
-- `bugfix/subscription-payment-flow`
-- `docs/api-documentation-update`
+**Types:**
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools
 
-## 🔄 Pull Request Process
-
-### 1. Preparation
-
-- Ensure your fork is up to date with the main repository
-- Create a new branch from `main` for your changes
-- Make your changes following our coding standards
-
-### 2. Before Submitting
-
-- [ ] All tests pass: `pnpm test:all`
-- [ ] Code follows style guidelines (ESLint, Prettier, PSR-12)
-- [ ] No console.log or dd() statements in production code
-- [ ] Documentation is updated for new features
-- [ ] Changelog is updated for significant changes
-
-### 3. Pull Request Template
-
-When creating a PR, use this template:
-
-```markdown
-## 📝 Description
-
-Brief description of changes made.
-
-## 🔗 Related Issue
-
-Fixes #(issue number)
-
-## 🧪 Testing
-
-- [ ] Unit tests added/updated
-- [ ] Integration tests pass
-- [ ] Manual testing completed
-
-## 📸 Screenshots (if applicable)
-
-Add screenshots for UI changes.
-
-## ✅ Checklist
-
-- [ ] Code follows style guidelines
-- [ ] Self-review completed
-- [ ] Tests added/updated
-- [ ] Documentation updated
-- [ ] No breaking changes (or marked as such)
+**Examples:**
+```bash
+feat(auth): add Google OAuth integration
+fix(api): resolve user registration validation error
+docs(readme): update installation instructions
+test(auth): add unit tests for login functionality
 ```
 
-### 4. Review Process
+### TypeScript Styleguide
 
-1. **Automated Checks**: CI/CD pipeline must pass
-2. **Code Review**: At least one maintainer review required
-3. **Testing**: All tests must pass with >90% coverage
-4. **Documentation**: Updates must be included for new features
+**Frontend (Next.js/React)**
 
-## 📏 Coding Standards
-
-### Frontend (Next.js + TypeScript)
+- Use TypeScript strict mode
+- Follow React best practices and hooks patterns
+- Use functional components with proper TypeScript interfaces
+- Implement proper error boundaries
+- Use proper naming conventions (PascalCase for components, camelCase for functions)
 
 ```typescript
-// Use TypeScript strict mode
-interface UserProps {
-  id: string;
-  name: string;
-  email: string;
+// Good
+interface UserProfileProps {
+  user: User;
+  onUpdate: (user: User) => void;
+  className?: string;
 }
 
-// Use React 19 features and modern patterns
-const UserComponent: React.FC<UserProps> = ({ id, name, email }) => {
+export function UserProfile({ user, onUpdate, className }: UserProfileProps) {
+  const [isEditing, setIsEditing] = useState(false);
   // Component implementation
-};
-
-// Use proper error handling
-try {
-  const result = await apiCall();
-  return result;
-} catch (error) {
-  console.error('Error occurred:', error);
-  throw error;
 }
+
+// Component should be exported as named export
+export { UserProfile };
 ```
 
-**Frontend Standards:**
-- Use **pnpm** for all package management
-- Follow **ESLint** and **Prettier** configurations
-- Use **React Hook Form** + **Zod** for forms
-- Implement **shadcn/ui** components
-- Follow **mobile-first** responsive design
-- Ensure **WCAG 2.1 AA** accessibility compliance
+- Use React Hook Form with Zod for form validation
+- Implement proper accessibility (ARIA labels, semantic HTML)
+- Follow mobile-first responsive design
+- Use Tailwind CSS with consistent design tokens
 
-### Backend (Laravel + PHP)
+### PHP Styleguide
+
+**Backend (Laravel)**
+
+- Follow PSR-12 coding standards
+- Use PHP 8.2+ features (typed properties, constructor promotion, etc.)
+- Implement comprehensive error handling
+- Follow Laravel conventions and best practices
 
 ```php
+// Good
 <?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
+use App\Exceptions\AuthenticationException;
+use Illuminate\Support\Facades\Hash;
 
-class UserService
+final class AuthenticationService
 {
-    /**
-     * Create a new user with proper validation.
-     *
-     * @param array $data
-     * @return User
-     * @throws \Exception
-     */
-    public function createUser(array $data): User
+    public function __construct(
+        private UserRepository $userRepository,
+        private TokenService $tokenService,
+    ) {}
+
+    public function authenticate(string $email, string $password): AuthenticationResult
     {
-        try {
-            // Implementation with proper error handling
-            return User::create($validated);
-        } catch (\Exception $e) {
-            Log::error('User creation failed: ' . $e->getMessage());
-            throw $e;
+        $user = $this->userRepository->findByEmail($email);
+        
+        if (!$user || !Hash::check($password, $user->password)) {
+            throw new AuthenticationException('Invalid credentials');
         }
+
+        return new AuthenticationResult(
+            user: $user,
+            token: $this->tokenService->createToken($user)
+        );
     }
 }
 ```
 
-**Backend Standards:**
-- Follow **PSR-12** coding standards
-- Use **SOLID** principles
-- Implement **PHPDoc** comments
-- Follow **Laravel** best practices
-- Use **type hints** and **return types**
-- Implement proper **error handling**
+- Use strict types and return type declarations
+- Implement proper service classes and dependency injection
+- Write comprehensive tests with PHPUnit
+- Use Laravel's built-in validation and authorization
 
-## 🧪 Testing Requirements
+### Testing Standards
 
-### Test Coverage Requirements
-
-- **Minimum Coverage**: 90% for all new code
-- **Unit Tests**: Required for all new functions/methods
-- **Integration Tests**: Required for API endpoints
-- **Feature Tests**: Required for user-facing features
-
-### Frontend Testing
-
+**Frontend Testing**
 ```typescript
-// Example test structure
+// Component Test Example
 import { render, screen, fireEvent } from '@testing-library/react';
-import { UserComponent } from './UserComponent';
+import { LoginForm } from '@/components/auth/login-form';
+import { AuthProvider } from '@/components/auth/auth-provider';
 
-describe('UserComponent', () => {
-  it('should render user information correctly', () => {
-    const props = { id: '1', name: 'John Doe', email: 'john@example.com' };
-    render(<UserComponent {...props} />);
-    
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+describe('LoginForm', () => {
+  it('should validate email format', async () => {
+    render(
+      <AuthProvider>
+        <LoginForm />
+      </AuthProvider>
+    );
+
+    const emailInput = screen.getByLabelText(/email/i);
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    fireEvent.blur(emailInput);
+
+    expect(await screen.findByText(/invalid email format/i)).toBeInTheDocument();
   });
 });
 ```
 
-### Backend Testing
-
+**Backend Testing**
 ```php
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
+use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserApiTest extends TestCase
+class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_be_created(): void
+    public function test_user_can_login_with_valid_credentials(): void
     {
-        $userData = [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'test@example.com',
             'password' => 'password123',
-        ];
+        ]);
 
-        $response = $this->postJson('/api/v1/users', $userData);
-
-        $response->assertStatus(201)
-                ->assertJsonStructure(['user', 'message']);
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                    'message',
+                    'user',
+                    'access_token',
+                    'token_type',
+                    'expires_at',
+                ]);
     }
 }
 ```
 
-### Running Tests
+### Documentation Styleguide
 
-```bash
-# Frontend tests
-cd frontend
-pnpm test              # Run all tests
-pnpm test:watch        # Watch mode
-pnpm test:coverage     # With coverage
+- Use clear, concise language
+- Include code examples for complex features
+- Keep API documentation up to date
+- Use proper markdown formatting
+- Include screenshots for UI features
 
-# Backend tests
-cd backend
-php artisan test       # Run all tests
-php artisan test --coverage  # With coverage
+## Project Structure
+
+### Frontend Structure
+```
+frontend/
+├── app/                    # Next.js 15 App Router
+├── components/
+│   ├── ui/                # shadcn/ui components
+│   ├── auth/              # Authentication components
+│   └── common/            # Shared components
+├── hooks/                 # Custom React hooks
+├── lib/
+│   ├── api/              # API client functions
+│   ├── validations/      # Zod schemas
+│   └── utils.ts          # Utility functions
+├── types/                # TypeScript type definitions
+└── __tests__/            # Test files
 ```
 
-## 📚 Documentation
-
-### Required Documentation
-
-1. **Code Comments**: All public methods must have PHPDoc/JSDoc
-2. **README Updates**: Update relevant README files for new features
-3. **API Documentation**: Update OpenAPI specs for API changes
-4. **User Guide**: Update user-facing documentation for new features
-
-### Documentation Standards
-
-```typescript
-/**
- * Generates content using AI based on provided topic
- * @param topic - The topic to generate content for
- * @param options - Generation options (length, style, etc.)
- * @returns Promise resolving to generated content
- * @throws APIError when generation fails
- */
-async function generateContent(topic: string, options: GenerationOptions): Promise<Content> {
-  // Implementation
-}
+### Backend Structure
+```
+backend/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/  # API controllers
+│   │   ├── Middleware/   # Custom middleware
+│   │   └── Requests/     # Form request validation
+│   ├── Models/           # Eloquent models
+│   ├── Services/         # Business logic services
+│   └── Exceptions/       # Custom exceptions
+├── database/
+│   ├── migrations/       # Database migrations
+│   ├── seeders/         # Database seeders
+│   └── factories/       # Model factories
+├── routes/              # Route definitions
+└── tests/               # PHPUnit tests
 ```
 
-## 🏷️ Issue Labels
+## Release Process
 
-We use the following labels to categorize issues:
+### Version Numbers
 
-- `bug` - Something isn't working
-- `enhancement` - New feature or request
-- `documentation` - Improvements or additions to documentation
-- `good first issue` - Good for newcomers
-- `help wanted` - Extra attention is needed
-- `priority: high` - High priority issue
-- `priority: low` - Low priority issue
-- `frontend` - Frontend related issue
-- `backend` - Backend related issue
+We use [Semantic Versioning](https://semver.org/) (SemVer):
 
-## 🎯 Development Workflow
+- **MAJOR** version when you make incompatible API changes
+- **MINOR** version when you add functionality in a backwards compatible manner
+- **PATCH** version when you make backwards compatible bug fixes
 
-### Feature Development
+### Release Checklist
 
-1. **Planning**: Create or assign issue
-2. **Branch**: Create feature branch
-3. **Develop**: Implement with tests
-4. **Test**: Ensure all tests pass
-5. **Review**: Create pull request
-6. **Deploy**: Merge after approval
+Before creating a release:
 
-### Bug Fixes
+- [ ] All tests pass
+- [ ] Documentation is updated
+- [ ] CHANGELOG.md is updated
+- [ ] Version numbers are bumped
+- [ ] Security vulnerabilities are addressed
+- [ ] Performance benchmarks meet requirements
 
-1. **Reproduce**: Confirm the bug exists
-2. **Diagnose**: Identify root cause
-3. **Fix**: Implement minimal fix
-4. **Test**: Verify fix works
-5. **Regress**: Ensure no new issues
-6. **Deploy**: Merge after review
+## Community
 
-## 🛠️ Development Tools
+- Join our discussions on [GitHub Discussions](https://github.com/your-username/autoblogger-pro/discussions)
+- Follow us on [Twitter](https://twitter.com/autoblogger_pro)
+- Read our [blog](https://blog.autoblogger-pro.com) for development updates
 
-### Required Tools
+## Questions?
 
-- **ESLint**: Code linting for JavaScript/TypeScript
-- **Prettier**: Code formatting
-- **PHPStan**: Static analysis for PHP
-- **PHP CS Fixer**: PHP code style fixer
+Don't hesitate to ask questions by opening an issue or starting a discussion. We're here to help!
 
-### Recommended IDE Extensions
+## License
 
-**VS Code:**
-- ESLint
-- Prettier
-- PHP Intelephense
-- Laravel Extension Pack
-- Tailwind CSS IntelliSense
-
-### Git Hooks
-
-We use pre-commit hooks to ensure code quality:
-
-```bash
-# Install pre-commit hooks
-pnpm prepare
-
-# Manual checks
-pnpm lint:fix          # Fix frontend linting
-composer fix-style     # Fix PHP style
-```
-
-## 🐛 Reporting Bugs
-
-When reporting bugs, please include:
-
-1. **Environment**: OS, Node.js version, PHP version
-2. **Steps to Reproduce**: Clear steps to reproduce the issue
-3. **Expected Behavior**: What should happen
-4. **Actual Behavior**: What actually happens
-5. **Screenshots**: If applicable
-6. **Additional Context**: Any other relevant information
-
-Use the bug report template when creating issues.
-
-## 💡 Suggesting Enhancements
-
-When suggesting enhancements:
-
-1. **Check Existing**: Search for existing feature requests
-2. **Use Template**: Use the feature request template
-3. **Be Specific**: Provide detailed descriptions
-4. **Consider Impact**: Think about backward compatibility
-5. **Provide Examples**: Include use cases and examples
-
-## 🏆 Recognition
-
-Contributors will be recognized in:
-
-- **Contributors Page**: Listed on our website
-- **README**: Mentioned in acknowledgments
-- **Releases**: Credited in release notes
-- **Social Media**: Featured on our social channels
-
-## 📞 Getting Help
-
-If you need help:
-
-- 💬 **Discord**: [Join our community](https://discord.gg/autoblogger-pro)
-- 📧 **Email**: dev-support@autoblogger-pro.com
-- 🐛 **Issues**: [Create an issue](https://github.com/code-craka/autoblogger-pro/issues/new)
-- 📖 **Documentation**: Check our [docs](./docs)
-
-## 📜 License
-
-By contributing, you agree that your contributions will be licensed under the same [MIT License](./LICENSE) that covers the project.
-
----
-
-Thank you for contributing to AutoBlogger Pro! Your efforts help make this project better for everyone. 🚀
+By contributing to AutoBlogger Pro, you agree that your contributions will be licensed under the MIT License.

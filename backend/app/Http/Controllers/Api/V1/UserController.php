@@ -3,281 +3,101 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class UserController extends Controller
 {
     /**
      * Get user profile
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function profile(Request $request): JsonResponse
     {
-        try {
-            $user = $request->user();
-
-            return response()->json([
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                    'is_active' => $user->is_active,
-                    'email_verified_at' => $user->email_verified_at,
-                    'last_login_at' => $user->last_login_at,
-                    'timezone' => $user->timezone,
-                    'avatar_url' => $user->avatar_url,
-                    'provider' => $user->provider,
-                    'created_at' => $user->created_at,
-                    'updated_at' => $user->updated_at,
-                ],
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to retrieve user profile',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-            ], 500);
-        }
+        return response()->json([
+            'user' => $request->user()
+        ]);
     }
 
     /**
      * Update user profile
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function updateProfile(Request $request): JsonResponse
     {
-        try {
-            $user = $request->user();
+        $user = $request->user();
 
-            $validator = Validator::make($request->all(), [
-                'name' => ['sometimes', 'required', 'string', 'max:255'],
-                'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-                'timezone' => ['sometimes', 'nullable', 'string', 'max:50'],
-                'avatar_url' => ['sometimes', 'nullable', 'url', 'max:255'],
-            ]);
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'timezone' => ['required', 'string', 'timezone'],
+            'avatar_url' => ['nullable', 'url', 'max:255'],
+        ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
-
-            $updateData = $validator->validated();
-
-            // If email is being updated, reset email verification
-            if (isset($updateData['email']) && $updateData['email'] !== $user->email) {
-                $updateData['email_verified_at'] = null;
-                $emailChanged = true;
-            } else {
-                $emailChanged = false;
-            }
-
-            $user->update($updateData);
-
-            // Send email verification if email was changed
-            if ($emailChanged) {
-                $user->sendEmailVerificationNotification();
-            }
-
+        if ($validator->fails()) {
             return response()->json([
-                'message' => 'Profile updated successfully' . ($emailChanged ? '. Please verify your new email address.' : ''),
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                    'is_active' => $user->is_active,
-                    'email_verified_at' => $user->email_verified_at,
-                    'timezone' => $user->timezone,
-                    'avatar_url' => $user->avatar_url,
-                    'updated_at' => $user->updated_at,
-                ],
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to update profile',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-            ], 500);
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
         }
+
+        $emailChanged = $user->email !== $request->email;
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'timezone' => $request->timezone,
+            'avatar_url' => $request->avatar_url,
+            // Reset email verification if email changed
+            'email_verified_at' => $emailChanged ? null : $user->email_verified_at,
+        ]);
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user->fresh()
+        ]);
     }
 
     /**
      * Change user password
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function changePassword(Request $request): JsonResponse
     {
-        try {
-            $user = $request->user();
+        $user = $request->user();
 
-            $validator = Validator::make($request->all(), [
-                'current_password' => ['required_if:has_password,true', 'string'],
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+        $validator = Validator::make($request->all(), [
+            'current_password' => ['required'],
+            'password' => ['required', 'confirmed', PasswordRule::min(8)],
+        ]);
 
-            // Check if user has a current password (not OAuth-only)
-            $hasPassword = !is_null($user->password);
-            $validator->sometimes('current_password', 'required', function () use ($hasPassword) {
-                return $hasPassword;
-            });
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
+        // Add custom validation for current password
+        $validator->after(function ($validator) use ($request, $user) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                $validator->errors()->add('current_password', 'The current password is incorrect.');
             }
 
-            // Verify current password if user has one
-            if ($hasPassword && !Hash::check($request->current_password, $user->password)) {
-                return response()->json([
-                    'message' => 'Current password is incorrect',
-                ], 400);
+            if ($request->current_password === $request->password) {
+                $validator->errors()->add('password', 'The new password must be different from the current password.');
             }
+        });
 
-            // Update password
-            $user->update([
-                'password' => Hash::make($request->password),
-            ]);
-
-            // Revoke all existing tokens to force re-login
-            $user->tokens()->delete();
-
+        if ($validator->fails()) {
             return response()->json([
-                'message' => 'Password changed successfully. Please log in again.',
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to change password',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-            ], 500);
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
         }
-    }
 
-    /**
-     * Delete user account
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function deleteAccount(Request $request): JsonResponse
-    {
-        try {
-            $user = $request->user();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
 
-            $validator = Validator::make($request->all(), [
-                'password' => ['required_if:has_password,true', 'string'],
-                'confirmation' => ['required', 'string', 'in:DELETE_MY_ACCOUNT'],
-            ]);
+        // Revoke all tokens for security
+        $user->tokens()->delete();
 
-            // Check if user has a password (not OAuth-only)
-            $hasPassword = !is_null($user->password);
-            if ($hasPassword) {
-                $validator->sometimes('password', 'required', function () {
-                    return true;
-                });
-            }
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
-
-            // Verify password if user has one
-            if ($hasPassword && !Hash::check($request->password, $user->password)) {
-                return response()->json([
-                    'message' => 'Password is incorrect',
-                ], 400);
-            }
-
-            // Revoke all tokens
-            $user->tokens()->delete();
-
-            // Soft delete or anonymize user data (depending on requirements)
-            // For GDPR compliance, you might want to anonymize instead of delete
-            $user->update([
-                'name' => 'Deleted User',
-                'email' => 'deleted_' . $user->id . '@deleted.local',
-                'password' => null,
-                'is_active' => false,
-                'provider' => null,
-                'provider_id' => null,
-                'provider_token' => null,
-                'avatar_url' => null,
-            ]);
-
-            // Or use soft delete
-            // $user->delete();
-
-            return response()->json([
-                'message' => 'Account deleted successfully',
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to delete account',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-            ], 500);
-        }
-    }
-
-    /**
-     * Get user statistics
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function statistics(Request $request): JsonResponse
-    {
-        try {
-            $user = $request->user();
-
-            // This would typically fetch from related models
-            // For now, returning mock data structure
-            $stats = [
-                'content_generations' => [
-                    'total' => 0,
-                    'this_month' => 0,
-                    'this_week' => 0,
-                ],
-                'subscription' => [
-                    'plan' => 'free',
-                    'status' => 'active',
-                    'usage_percentage' => 0,
-                ],
-                'account' => [
-                    'member_since' => $user->created_at,
-                    'last_active' => $user->last_login_at,
-                    'total_logins' => 1, // Would be tracked in a separate table
-                ],
-            ];
-
-            return response()->json([
-                'statistics' => $stats,
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to retrieve user statistics',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error',
-            ], 500);
-        }
+        return response()->json([
+            'message' => 'Password changed successfully. Please log in again.'
+        ]);
     }
 }
