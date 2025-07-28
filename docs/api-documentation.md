@@ -1,11 +1,21 @@
 # AutoBlogger Pro API Documentation
 
 ## Overview
-AutoBlogger Pro API provides comprehensive authentication and user management endpoints for the AI-powered content generation platform.
+AutoBlogger Pro API provides comprehensive authentication, user management, and AI-powered content generation endpoints.
 
 **Base URL**: `http://localhost:8000/api`  
 **API Version**: `v1`  
 **Authentication**: Bearer Token (JWT via Laravel Passport)
+
+---
+
+## Table of Contents
+1. [Authentication Endpoints](#authentication-endpoints)
+2. [User Management](#user-management)
+3. [Content Generation](#content-generation)
+4. [Content Management](#content-management)
+5. [Error Handling](#error-handling)
+6. [Rate Limiting](#rate-limiting)
 
 ---
 
@@ -385,6 +395,303 @@ Returns system health status and component checks.
     "queue": {
       "status": "ok",
       "connection": "redis"
+    }
+  }
+}
+```
+
+---
+
+## Content Generation
+
+### Generate Single Content
+Creates AI-generated content from a topic using OpenAI models.
+
+**Endpoint**: `POST /api/v1/content/generate`
+
+**Request Body**:
+```json
+{
+  "topic": "The future of artificial intelligence in healthcare",
+  "title": "AI Revolution in Healthcare: What's Next?",
+  "content_type": "blog_post",
+  "tone": "professional",
+  "target_audience": "healthcare professionals",
+  "word_count": 1500,
+  "keywords": ["artificial intelligence", "healthcare", "medical AI"],
+  "ai_model": "gpt-4-turbo-preview",
+  "temperature": 0.7
+}
+```
+
+**Success Response** (200):
+```json
+{
+  "message": "Content generated successfully",
+  "content": {
+    "id": 1,
+    "user_id": 1,
+    "title": "AI Revolution in Healthcare: What's Next?",
+    "slug": "ai-revolution-in-healthcare-whats-next",
+    "topic": "The future of artificial intelligence in healthcare",
+    "content": "# AI Revolution in Healthcare: What's Next?\n\nArtificial intelligence is transforming...",
+    "meta_description": "Explore how AI is revolutionizing healthcare with advanced diagnostics, personalized treatment, and improved patient outcomes.",
+    "keywords": ["artificial intelligence", "healthcare", "medical AI"],
+    "status": "draft",
+    "content_type": "blog_post",
+    "tone": "professional",
+    "target_audience": "healthcare professionals",
+    "word_count": 1487,
+    "tokens_used": 2234,
+    "generation_cost": 0.0445,
+    "ai_model": "gpt-4-turbo-preview",
+    "quality_score": 0.89,
+    "created_at": "2025-07-28T10:00:00.000000Z",
+    "updated_at": "2025-07-28T10:00:00.000000Z"
+  },
+  "generation_stats": {
+    "tokens_used": 2234,
+    "model": "gpt-4-turbo-preview",
+    "cost_estimate": {
+      "total_cost": 0.0445,
+      "input_cost": 0.0089,
+      "output_cost": 0.0356,
+      "total_tokens": 2234,
+      "input_tokens": 445,
+      "output_tokens": 1789,
+      "currency": "USD"
+    },
+    "word_count": 1487,
+    "reading_time": 7
+  }
+}
+```
+
+### Generate Bulk Content
+Creates multiple pieces of content from an array of topics.
+
+**Endpoint**: `POST /api/v1/content/bulk-generate`
+
+**Request Body**:
+```json
+{
+  "topics": [
+    "Machine learning in finance",
+    "Blockchain technology trends",
+    "Cybersecurity best practices"
+  ],
+  "content_type": "article",
+  "tone": "professional",
+  "target_audience": "business professionals",
+  "word_count": 1000,
+  "keywords": ["technology", "innovation"],
+  "ai_model": "gpt-4-turbo-preview"
+}
+```
+
+**Success Response** (200):
+```json
+{
+  "message": "Bulk content generation completed",
+  "content": [
+    {
+      "id": 2,
+      "title": "Machine Learning Transforms Financial Services",
+      "topic": "Machine learning in finance",
+      "status": "draft",
+      "word_count": 1045
+    },
+    {
+      "id": 3,
+      "title": "Blockchain Technology: Key Trends to Watch",
+      "topic": "Blockchain technology trends", 
+      "status": "draft",
+      "word_count": 987
+    }
+  ],
+  "generation_stats": {
+    "total_topics": 3,
+    "successful_generations": 2,
+    "failed_generations": 1,
+    "total_tokens_used": 4567,
+    "total_cost": 0.0912
+  }
+}
+```
+
+## Content Management
+
+### List User Content
+Retrieves a paginated list of user's content with optional filtering.
+
+**Endpoint**: `GET /api/v1/content`
+
+**Query Parameters**:
+- `page` (integer, optional): Page number for pagination
+- `per_page` (integer, optional): Items per page (default: 15, max: 50)
+- `status` (string, optional): Filter by status (draft, published, archived)
+- `content_type` (string, optional): Filter by content type
+- `search` (string, optional): Search in title and content
+
+**Success Response** (200):
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "title": "AI Revolution in Healthcare",
+      "slug": "ai-revolution-in-healthcare",
+      "status": "published",
+      "content_type": "blog_post",
+      "word_count": 1487,
+      "quality_score": 0.89,
+      "created_at": "2025-07-28T10:00:00.000000Z"
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "last_page": 3,
+    "per_page": 15,
+    "total": 42
+  }
+}
+```
+
+### Get Single Content
+Retrieves a specific piece of content by ID.
+
+**Endpoint**: `GET /api/v1/content/{id}`
+
+**Success Response** (200):
+```json
+{
+  "content": {
+    "id": 1,
+    "title": "AI Revolution in Healthcare",
+    "content": "# AI Revolution in Healthcare\n\nFull content here...",
+    "meta_description": "Explore how AI is revolutionizing healthcare...",
+    "keywords": ["artificial intelligence", "healthcare"],
+    "status": "published",
+    "word_count": 1487,
+    "quality_score": 0.89,
+    "created_at": "2025-07-28T10:00:00.000000Z"
+  }
+}
+```
+
+### Update Content
+Updates an existing piece of content.
+
+**Endpoint**: `PUT /api/v1/content/{id}`
+
+**Request Body**:
+```json
+{
+  "title": "Updated Title",
+  "content": "Updated content here...",
+  "meta_description": "Updated meta description",
+  "keywords": ["new", "keywords"],
+  "status": "published"
+}
+```
+
+**Success Response** (200):
+```json
+{
+  "message": "Content updated successfully",
+  "content": {
+    "id": 1,
+    "title": "Updated Title",
+    "content": "Updated content here...",
+    "updated_at": "2025-07-28T11:00:00.000000Z"
+  }
+}
+```
+
+### Delete Content
+Deletes a specific piece of content.
+
+**Endpoint**: `DELETE /api/v1/content/{id}`
+
+**Success Response** (200):
+```json
+{
+  "message": "Content deleted successfully"
+}
+```
+
+### Analyze Content Quality
+Analyzes content quality using AI and provides improvement suggestions.
+
+**Endpoint**: `POST /api/v1/content/{id}/analyze-quality`
+
+**Success Response** (200):
+```json
+{
+  "message": "Content analysis completed",
+  "analysis": {
+    "success": true,
+    "analysis": "Overall Quality Score: 8.5/10\n\nStrengths:\n- Clear structure with logical flow\n- Good keyword density\n- Engaging introduction\n\nAreas for improvement:\n- Add more internal links\n- Include actionable takeaways\n- Expand conclusion section",
+    "tokens_used": 456,
+    "analyzed_at": "2025-07-28T10:30:00.000000Z"
+  }
+}
+```
+
+### Get Available AI Models
+Retrieves list of available OpenAI models.
+
+**Endpoint**: `GET /api/v1/content/models`
+
+**Success Response** (200):
+```json
+{
+  "success": true,
+  "models": [
+    {
+      "id": "gpt-4-turbo-preview",
+      "created": 1677649963,
+      "owned_by": "openai"
+    },
+    {
+      "id": "gpt-4",
+      "created": 1687882411,
+      "owned_by": "openai"
+    },
+    {
+      "id": "gpt-3.5-turbo",
+      "created": 1677610602,
+      "owned_by": "openai"
+    }
+  ],
+  "count": 3
+}
+```
+
+### Get Content Statistics
+Retrieves user's content generation statistics.
+
+**Endpoint**: `GET /api/v1/content/stats`
+
+**Success Response** (200):
+```json
+{
+  "stats": {
+    "total_content": 24,
+    "published_content": 18,
+    "draft_content": 6,
+    "total_words": 48750,
+    "total_tokens_used": 195000,
+    "total_cost": 12.45,
+    "content_by_type": {
+      "blog_post": 15,
+      "article": 8,
+      "custom": 1
+    },
+    "content_by_month": {
+      "2025-07": 8,
+      "2025-06": 12,
+      "2025-05": 4
     }
   }
 }

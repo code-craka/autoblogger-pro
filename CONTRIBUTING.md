@@ -48,7 +48,7 @@ Please follow these steps to have your contribution considered by the maintainer
 
 ### Prerequisites
 
-- Node.js 18+ with pnpm
+- Node.js 22+ with pnpm 10+
 - PHP 8.2+ with Composer
 - PostgreSQL 14+
 - Redis 6+

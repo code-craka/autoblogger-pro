@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\OAuthController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\ContentController;
 use App\Http\Controllers\HealthController;
 
 /*
@@ -53,6 +54,19 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::get('/profile', [UserController::class, 'profile'])->name('profile');
             Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
             Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password');
+        });
+
+        // Content generation and management
+        Route::prefix('content')->name('content.')->group(function () {
+            Route::get('/', [ContentController::class, 'index'])->name('index');
+            Route::post('/generate', [ContentController::class, 'generate'])->name('generate');
+            Route::post('/bulk-generate', [ContentController::class, 'bulkGenerate'])->name('bulk-generate');
+            Route::get('/stats', [ContentController::class, 'getStats'])->name('stats');
+            Route::get('/models', [ContentController::class, 'getModels'])->name('models');
+            Route::get('/{content}', [ContentController::class, 'show'])->name('show');
+            Route::put('/{content}', [ContentController::class, 'update'])->name('update');
+            Route::delete('/{content}', [ContentController::class, 'destroy'])->name('destroy');
+            Route::post('/{content}/analyze-quality', [ContentController::class, 'analyzeQuality'])->name('analyze-quality');
         });
     });
 });
