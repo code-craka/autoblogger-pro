@@ -420,10 +420,10 @@ describe('Authentication Integration Tests', () => {
 
   describe('Error Handling Integration', () => {
     test('network errors are handled gracefully', async () => {
-      // Mock network error
+      // Mock network error using MSW v2 syntax
       server.use(
-        http.post('http://localhost:8000/api/v1/auth/login', async ({ request }) => {
-          return HttpResponse.networkError('Network error occurred');
+        http.post('http://localhost:8000/api/v1/auth/login', () => {
+          return HttpResponse.error();
         })
       );
 

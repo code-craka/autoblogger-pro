@@ -4,6 +4,7 @@ import '@/styles/globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ToastProvider } from '@/hooks/use-toast'
 import { Toaster } from '@/components/ui/toaster'
+import { Navigation } from '@/components/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,7 +49,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ToastProvider>
-            {children}
+            <div className="flex min-h-screen">
+              <Navigation />
+              <main className="flex-1 min-w-0">
+                {children}
+              </main>
+            </div>
             <Toaster />
           </ToastProvider>
         </ThemeProvider>
